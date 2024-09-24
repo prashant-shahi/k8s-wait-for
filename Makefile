@@ -1,4 +1,5 @@
 TAG = $(shell git describe --tags --always)
+DOCKER_REPO := $(if $(DOCKER_REPO),$(DOCKER_REPO),coolboi567)
 USER_NAME = $(shell git config --get remote.origin.url | sed 's/\.git$$//' | tr ':.' '/' | rev | cut -d '/' -f 2 | rev)
 REPO_NAME = $(shell git config --get remote.origin.url | sed 's/\.git$$//' | tr ':.' '/' | rev | cut -d '/' -f 1 | rev)
 TARGET := $(if $(TARGET),$(TARGET),$(shell ./evaluate_platform.sh))
@@ -7,7 +8,7 @@ BUILD_DATE = $(shell date -u +'%Y-%m-%dT%H:%M:%SZ')
 BUILD_FLAGS := $(if $(BUILD_FLAGS),$(BUILD_FLAGS),--load --no-cache)
 BUILDER_NAME = k8s-wait-for-builder
 NON_ROOT_DOCKERFILE = DockerfileNonRoot
-DOCKER_TAGS = $(USER_NAME)/$(REPO_NAME):$(TAG_PREFIX)latest $(USER_NAME)/$(REPO_NAME):$(TAG_PREFIX)$(TAG) ghcr.io/$(USER_NAME)/$(REPO_NAME):$(TAG_PREFIX)latest ghcr.io/$(USER_NAME)/$(REPO_NAME):$(TAG_PREFIX)$(TAG)
+DOCKER_TAGS = $(DOCKER_REPO)/$(REPO_NAME):$(TAG_PREFIX)latest $(DOCKER_REPO)/$(REPO_NAME):$(TAG_PREFIX)$(TAG) ghcr.io/$(USER_NAME)/$(REPO_NAME):$(TAG_PREFIX)latest ghcr.io/$(USER_NAME)/$(REPO_NAME):$(TAG_PREFIX)$(TAG)
 
 all: push
 
